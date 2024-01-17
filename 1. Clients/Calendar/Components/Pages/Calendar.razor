@@ -1,0 +1,36 @@
+﻿@page "/calendar"
+<PageTitle>Calendar</PageTitle>
+
+<h1>Todays date is: @TodaysDate</h1>
+
+<div id="calendar">
+    <h3>It is currently @DayOfTheWeek</h3>
+
+    @if (!IsEndOfWeek(DateTime.Today))
+    {
+        <h4>Today is not the end of the week.</h4>
+    }
+</div>
+
+@code 
+{
+    private string TodaysDate = DateTime.Today.ToShortDateString();
+
+    private string DayOfTheWeek = DateTime.Today.DayOfWeek.ToString();
+
+    private List<Weekday> Weekdays = Enum.GetValues(typeof(Weekday)).Cast<Weekday>().ToList();
+
+    /// <summary>
+    /// Method used to determine if the current day is set to Sunday. If it is, then this method should return true
+    /// to signify that it is the end of the week. If it is not Sunday, then it should return false.
+    /// </summary>
+    /// <param name="specifiedDate"></param>
+    /// <returns>Boolean value determining if the specified day is Sunday.</returns>
+    private bool IsEndOfWeek(DateTime specifiedDate)
+    {
+        var endOfWeek = Weekdays
+            .FirstOrDefault(weekday => weekday.Equals(Weekday.Sunday));
+
+        return specifiedDate.DayOfWeek.ToString() == endOfWeek.ToString();
+    }
+}
